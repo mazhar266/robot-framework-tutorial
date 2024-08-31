@@ -1,13 +1,21 @@
 *** Settings ***
 Library     RequestsLibrary
 
-*** Test Cases ***
-TEST 10
-    ${res}=    GET     http://localhost:5000/      params=degree=10
-    Status Should Be  200
-    Should Be Equal As Strings    50.0  ${res.json()}[fahrenheit]
+*** Variables ***
+${HOST}=        http://localhost:5000/
 
-TEST 50
-    ${res}=    GET     http://localhost:5000/      params=degree=50
-    Status Should Be  200
-    Should Be Equal As Strings    122.0  ${res.json()}[fahrenheit]
+*** Test Cases ***
+TEST ZERO
+    ${res}=     GET     ${HOST}
+    Status Should Be    200
+    Should Be Equal As Numbers    32.0    ${res.json()}[fahrenheit]
+
+TEST TEN
+    ${res}=     GET     ${HOST}      params=degree=10
+    Status Should Be    200
+    Should Be Equal As Numbers    50.0    ${res.json()}[fahrenheit]
+
+TEST HUNDRED
+    ${res}=     GET     ${HOST}      params=degree=100
+    Status Should Be    200
+    Should Be Equal As Numbers    212.0    ${res.json()}[fahrenheit]
